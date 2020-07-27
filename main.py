@@ -6,11 +6,13 @@
 import requests
 import time
 from earthquake import Earthquake
+from termcolor import colored
 
 dict_dick = {
     'russia': [52.4000000, 54.9833300],
     'usa': [39.000000, -80.500000],
     'netherlands': [52.3740300, 4.8896900],
+    'japan': [35.6895000, 139.6917100],
 }
 
 user_starttime = input('Введи старт временного промежутка: ')
@@ -54,13 +56,21 @@ for _ in range(range_value):
 answer = input('Отсортировать по магнитуде или по времени? [m/t] ').lower()
 if answer == 'm':
     lst_of_earthquakes.sort(key=lambda x: x.magnitude, reverse=True)
-    for obj in lst_of_earthquakes:
-        print('Place: ' + obj.place + ' Date: ' + time.strftime("%a, %d %b %Y %H:%M:%S",
-                                                                time.localtime(obj.date / 1000)) +
-              ' Magnitude: ' + str(obj.magnitude))
 elif answer == 't':
     lst_of_earthquakes.sort(key=lambda x: x.date, reverse=True)
-    for obj in lst_of_earthquakes:
-        print('Place: ' + obj.place + ' Date: ' + time.strftime("%a, %d %b %Y %H:%M:%S",
-                                                                time.localtime(obj.date / 1000)) + ' Magnitude: ' + str(
-            obj.magnitude))
+
+count = 1
+place = colored(' место: ', 'green', attrs=['bold'])
+date = colored('Дата: ', 'cyan', attrs=['bold'])
+magnitude = colored('Магнитуда: ', 'yellow', attrs=['bold'])
+for obj in lst_of_earthquakes:
+    colored_count = colored(str(count), 'green', attrs=['bold'])
+    print(colored_count + place + obj.place + ' | ' + date + time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime(
+        obj.date / 1000)) + ' | ' + magnitude + str(obj.magnitude))
+    count += 1
+
+# ------------------------------------Для корректного вывода в консоле cmd---------------------------------------------
+# for obj in lst_of_earthquakes:
+#     print(f'{count}' + ' место: ' + obj.place + ' | Дата: ' + time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime(
+#         obj.date / 1000)) + ' | Магнитуда: ' + str(obj.magnitude))
+#     count += 1
