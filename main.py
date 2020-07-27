@@ -33,5 +33,3 @@ for place in range(data['metadata']['count']):
           magnitude_value + '.')
     count += 1
 
-
-test_variable = 1
