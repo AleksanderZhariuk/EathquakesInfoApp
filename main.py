@@ -32,3 +32,6 @@ for place in range(data['metadata']['count']):
     print(str(count + 1) + '.' + 'Место: ' + data['features'][count]['properties']['place'] + '.' + ' Магнитуда: ' +
           magnitude_value + '.')
     count += 1
+
+
+test_variable = 1
