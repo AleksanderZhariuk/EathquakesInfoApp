@@ -53,7 +53,7 @@ for _ in range(range_value):
     lst_of_earthquakes.append(earthquake)
     count += 1
 
-answer = input('Отсортировать по магнитуде или по времени? [m/t] ').lower()
+answer = input('Отсортировать по магнитуде или по времени? [M/T] ').lower()
 if answer == 'm':
     lst_of_earthquakes.sort(key=lambda x: x.magnitude, reverse=True)
 elif answer == 't':
