@@ -5,28 +5,33 @@
 
 import requests
 import time
+import sqlite3
 from earthquake import Earthquake
 from termcolor import colored
 
-dict_dick = {
-    'russia': [52.4000000, 54.9833300],
-    'usa': [39.000000, -80.500000],
-    'netherlands': [52.3740300, 4.8896900],
-    'japan': [35.6895000, 139.6917100],
-}
 
 user_starttime = input('Введи старт временного промежутка: ')
 user_endtime = input('Введи конец временного промежутка: ')
-user_country = input('Введи страну: ').lower()
-
-if user_country in dict_dick.keys():
-    user_latitude = dict_dick[user_country][0]
-    user_longitude = dict_dick[user_country][1]
+name = [input('Введите страну: ').lower().capitalize()]
+connection = sqlite3.connect('countries_db.db')
+cursor = connection.cursor()
+# cursor.execute('CREATE TABLE Countries (CountryName TEXT, Latitude FLOAT, Longitude FLOAT)')
+cursor.execute('SELECT CountryName from Countries WHERE CountryName = ?', name)
+countries_name = cursor.fetchall()
+if len(countries_name) == 0:
+    print('Такой страны не найдено, она будет добавлена в базу. Введите пожалуйста данные.')
+    name_of_country = name[0]
+    user_latitude = float(input('Введите широту: '))
+    user_longitude = float(input('Введите долготу: '))
+    info_about_country = (name_of_country, user_latitude, user_longitude)
+    cursor.execute('INSERT INTO Countries VALUES(?, ?, ?)', info_about_country)
 else:
-    print('Страна не найдена')
-    user_latitude = input('Введи широту (в десятичных градусах): ')
-    user_longitude = input('Введи долготу(в десятичных градусах): ')
-
+    cursor.execute('SELECT CountryName, Latitude, Longitude from Countries WHERE CountryName = ?', name)
+    info_about_country = cursor.fetchall()
+    user_latitude = info_about_country[0][1]
+    user_longitude = info_about_country[0][2]
+connection.commit()
+connection.close()
 user_maxradiuskm = input('Введи максимальный радиус (в км): ')
 user_minmagnitude = input('Введи минимальную магнитуду: ')
 
